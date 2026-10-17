@@ -1,25 +1,35 @@
 # OWNGAME HELPI
 
-Android compatibility work for PylaAI.
+Android compatibility and model-debugging work inspired by [PylaAI](https://github.com/PylaAI/PylaAI).
 
-## Build APK
+## Build and download
 
-1. Open the **Actions** tab.
-2. Run **Build OWNGAME HELPI APK** or push a commit to `main`.
-3. Open the workflow run and download `OWNGAME-HELPI-debug-apk`.
-4. Extract `app-debug.apk` and install it on Android.
+1. Open the [Actions tab](https://github.com/matteovandermescht-cell/OWNGAME-HELPI/actions).
+2. Open the latest successful **Build OWNGAME HELPI APK** run.
+3. Download the `OWNGAME-HELPI-debug-apk` artifact and extract `app-debug.apk`.
+4. Install the APK on your Android device.
 
-## Ported components so far
+## Android components
 
-- Android-native ONNX Runtime dependency instead of Windows DirectML.
-- Select a PylaAI `.onnx` file and test whether Android ONNX Runtime can load it; the app displays input/output metadata.
-- API diagnostics for the PylaAI `/check_version` (GET) and `/get_brawler_list` (POST) endpoints.
-- HTTPS networking permission for API requests.
+- Android-native ONNX Runtime, replacing the Windows-only DirectML/GPU runtime path.
+- Load a local ONNX model and inspect its input/output names and tensor metadata.
+- Pick a screenshot from device storage, resize it to a rank-4 image tensor, normalize RGB values to 0..1, and run local ONNX inference.
+- Inspect a short summary of output values to help debug model compatibility.
+- Test PylaAI's `/check_version` (GET) and `/get_brawler_list` (POST) endpoints over HTTPS.
+- GitHub Actions builds a debug APK on pushes to the main branch.
 
-## Limitations
+## Important model notes
 
-The full bot is not yet ported. Windows-specific capture/control code and the original inference pipeline still require Android replacements. The public PylaAI source defaults its API host to `localhost`; on Android, that means the phone itself, so enter a reachable API hostname to test a server.
+Screenshot inference currently supports rank-4 float image inputs with one or three channels. It uses basic RGB 0..1 normalization and a default 640×640 size when the model dimensions are dynamic. Actual PylaAI models may require different color order, normalization, tensor layout, dimensions, or output decoding; compare these settings with the model's preprocessing code before judging output quality.
 
-Original source: https://github.com/PylaAI/PylaAI
+## Not yet ported
 
-PylaAI is licensed CC BY-NC 4.0. Keep attribution and do not sell or monetize derivative work.
+This is not a complete PylaAI Android port. Windows-specific screen capture, desktop input control, and game-play automation are not included. For debugging, use screenshots captured manually from a game or test environment.
+
+The API test requires a reachable HTTPS server hostname. On Android, `localhost` means the phone itself, not your PC. The open-source PylaAI README says cloud features are disabled by default, so API checks may fail if no server is running.
+
+## Attribution and license
+
+Original project: https://github.com/PylaAI/PylaAI
+
+PylaAI is licensed under CC BY-NC 4.0. Preserve attribution and do not sell or monetize derivative work.
