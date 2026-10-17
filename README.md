@@ -1,6 +1,6 @@
 # OWNGAME HELPI
 
-Android porting work for PylaAI.
+Android compatibility work for PylaAI.
 
 ## Build APK
 
@@ -9,11 +9,16 @@ Android porting work for PylaAI.
 3. Open the workflow run and download `OWNGAME-HELPI-debug-apk`.
 4. Extract `app-debug.apk` and install it on Android.
 
-## Android compatibility work
+## Ported components so far
 
-- Uses Microsoft's Android-native ONNX Runtime instead of the original Windows DirectML runtime.
-- Lets you select a PylaAI `.onnx` model and checks whether Android ONNX Runtime can load it, then displays its input/output metadata.
-- The full PylaAI bot is not yet ported. Its Windows-specific code and device-control pipeline still need Android replacements.
+- Android-native ONNX Runtime dependency instead of Windows DirectML.
+- Select a PylaAI `.onnx` file and test whether Android ONNX Runtime can load it; the app displays input/output metadata.
+- API diagnostics for the PylaAI `/check_version` (GET) and `/get_brawler_list` (POST) endpoints.
+- HTTPS networking permission for API requests.
+
+## Limitations
+
+The full bot is not yet ported. Windows-specific capture/control code and the original inference pipeline still require Android replacements. The public PylaAI source defaults its API host to `localhost`; on Android, that means the phone itself, so enter a reachable API hostname to test a server.
 
 Original source: https://github.com/PylaAI/PylaAI
 
